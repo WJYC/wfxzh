@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.wfx.manager.user.mapper.UserMapper">
+    <resultMap id="baseResultMap" type="com.qianfeng.wfx.manager.user.po.UserInfo">
+        <id property="userId" column="user_id" javaType="java.lang.String"/>
+        <result property="userName" column="user_name" javaType="java.lang.String"/>
+        <result property="account" column="account" javaType="java.lang.String"/>
+        <result property="password" column="password" javaType="java.lang.String"/>
+        <result property="remark" column="remark" javaType="java.lang.String"/>
+        <result property="userType" column="user_type" javaType="java.lang.String"/>
+        <result property="enabled" column="enabled" javaType="java.lang.String"/>
+        <result property="loginTime" column="login_time" javaType="java.sql.Timestamp"/>
+    </resultMap>
+    <resultMap id="loginResultMap" type="com.qianfeng.wfx.manager.user.bean.LoginUserBean">
+        <id property="userId" column="user_id" javaType="java.lang.String"/>
+        <result property="userName" column="user_name" javaType="java.lang.String"/>
+        <result property="account" column="account" javaType="java.lang.String"/>
+        <result property="password" column="password" javaType="java.lang.String"/>
+        <result property="remark" column="remark" javaType="java.lang.String"/>
+        <result property="userType" column="user_type" javaType="java.lang.String"/>
+        <result property="enabled" column="enabled" javaType="java.lang.String"/>
+        <result property="loginTime" column="login_time" javaType="java.sql.Timestamp"/>
+        <result property="roleCode" column="role_code" javaType="java.lang.String"/>
+        <result property="roleName" column="role_name" javaType="java.lang.String"/>
+    </resultMap>
+    <resultMap id="funcResultMap" type="com.qianfeng.wfx.manager.user.po.SysModule">
+        <id property="moduleId" column="module_Id" javaType="java.lang.String"/>
+        <result property="moduleCode" column="module_Code" javaType="java.lang.String"/>
+        <result property="moduleName" column="module_Name" javaType="java.lang.String"/>
+        <result property="linkUrl" column="link_Url" javaType="java.lang.String"/>
+        <result property="moduleOrder" column="module_Order" javaType="java.lang.Long"/>
+        <result property="parentModule" column="parent_Module" javaType="java.lang.String"/>
+        <result property="moduleDesc" column="module_Desc" javaType="java.lang.String"/>
+        <result property="expanded" column="expanded" javaType="java.lang.String"/>
+        <result property="leaf" column="leaf" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="queryAllFunc" resultMap="funcResultMap">
+        SELECT * FROM sys_module;
+    </select>
+
+    <select id="queryFuncByRole" resultMap="funcResultMap">
+        SELECT m.module_Code,m.module_Id,m.module_Name FROM sys_module m JOIN sys_role r JOIN sys_role_fun rf
+          on m.module_code=rf.module_id
+          AND r.role_code=rf.role_id
+          AND r.role_code=#{roleCode} ORDER BY module_order;
+    </select>
+    <select id="queryNameFuncByRole" resultType="java.lang.String">
+        SELECT m.module_Code FROM sys_module m JOIN sys_role r JOIN sys_role_fun rf
+        on m.module_code=rf.module_id
+        AND r.role_code=rf.role_id
+        AND r.role_code=#{roleCode} ORDER BY module_order;
+    </select>
+
+
+    <select id="findByUserName" resultMap="loginResultMap">
+        select u.*,r.role_code,r.role_name from user_info u join sys_user_role ur join sys_role r
+            on u.user_id=ur.user_id
+            and ur.role_id=r.role_code
+            and account=#{account};
+    </select>
+    <delete id="delFunByCode">
+        delete from sys_role_fun where module_id in
+        <foreach item="code" collection="array" open="(" close=")" separator=",">
+            #{code}
+        </foreach>
+
+    </delete>
+
+    <insert id="addFunc">
+        insert into sys_role_fun(module_id, role_id) values (#{moduleId},#{roleId})
+    </insert>
+
+
+    <resultMap id="nodeResultMap" type="com.qianfeng.wfx.manager.vo.ParentNodeVO">
+        <result column="module_name" property="text" javaType="java.lang.String"/>
+        <collection property="nodes" column="{moduleName=module_name,roleCode=role_code}"  select="queryLeafNode"/>
+    </resultMap>
+
+    <resultMap id="leafNodeResultMap" type="com.qianfeng.wfx.manager.vo.LeafNodeVO">
+        <result column="module_name" property="text" javaType="java.lang.String"/>
+        <result column="link_url" property="href" javaType="java.lang.String"/>
+    </resultMap>
+    <select id="queryParentNode" resultMap="nodeResultMap">
+        select m1.module_name,r.role_code from sys_module m1 join sys_module m2 join sys_role r join sys_role_fun rf
+        on m1.parent_module=m2.module_code
+        and m2.module_code='0101'
+        and r.role_code=rf.role_id
+        and rf.module_id=m1.module_code
+        and r.role_code=#{roleCode};
+    </select>
+
+    <select id="queryLeafNode" resultMap="leafNodeResultMap">
+        select m1.module_name,m1.link_url from sys_module m1 join sys_module m2 join sys_role r join sys_role_fun rf
+        on m1.parent_module=m2.module_code
+        and m2.module_name=#{moduleName}
+        and r.role_code=rf.role_id
+        and rf.module_id=m1.module_code
+        and r.role_code=#{roleCode};
+    </select>
+
+    <select id="queryFuncByUser" resultType="java.lang.String">
+        select m.module_name from sys_role r join sys_module m join sys_role_fun rf join user_info u
+        join sys_user_role ur
+        on r.role_code=rf.role_id
+        and u.user_id=ur.user_id
+        and ur.role_id=r.role_code
+        and rf.module_id=m.module_code
+        and u.account=#{username} order by m.module_order;
+    </select>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.wfx.manager.user.mapper.MerchantMapper">
+    <resultMap id="merchantResultMap" type="com.qianfeng.wfx.manager.user.po.WebCustomer">
+        <id property="customerId" column="customer_id"  javaType="java.lang.String"/>
+        <result property="customerName" column="customer_name" javaType="java.lang.String"/>
+        <result property="qq" column="qq" javaType="java.lang.String"/>
+        <result property="wxh" column="wxh" javaType="java.lang.String"/>
+        <result property="phone" column="phone" javaType="java.lang.String"/>
+        <result property="createtime" column="createtime" javaType="java.sql.Timestamp"/>
+        <result property="loginName" column="login_name" javaType="java.lang.String"/>
+        <result property="loginPwd" column="login_pwd" javaType="java.lang.String"/>
+        <result property="state" column="state" javaType="java.lang.Long"/>
+        <result property="level" column="level" javaType="java.lang.Long"/>
+        <result property="accBalance" column="acc_balance" javaType="java.lang.Double"/>
+        <result property="updateTime" column="update_time" javaType="java.sql.Timestamp"/>
+        <result property="website" column="website" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="queryMerchantList" resultMap="merchantResultMap">
+            SELECT * FROM wxb_customer;
+    </select>
+
+    <insert id="saveMerchantInfo">
+        INSERT INTO wxb_customer(customer_id, customer_name, QQ, wxh, phone, createtime, login_name, login_pwd, state, level, acc_balance, update_time, website)
+          VALUES (#{customerId},#{customerName},#{qq},#{wxh},#{phone},#{createtime},#{loginName},#{loginPwd},#{state},#{level},#{accBalance},#{updateTime},#{website});
+
+    </insert>
+</mapper>

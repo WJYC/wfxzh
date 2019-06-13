@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.vip.mapper.MemberMapper">
+    <resultMap id="memberResultMap" type="com.qianfeng.vip.po.WxbMemeber">
+        <id property="memeberId" column="memeber_id" javaType="java.lang.String"></id>
+        <result property="account" column="account" javaType="java.lang.String"></result>
+        <result property="qqNum" column="qq_num" javaType="java.lang.String"></result>
+        <result property="email" column="email" javaType="java.lang.String"></result>
+        <result property="phone" column="phone" javaType="java.lang.String"></result>
+        <result property="goodId" column="good_id" javaType="java.lang.String"></result>
+        <result property="recomUser" column="recom_user" javaType="java.lang.String"></result>
+        <result property="registerTime" column="register_time" javaType="java.sql.Timestamp"></result>
+        <result property="payAccount" column="sku_name" javaType="java.lang.String"></result>
+        <result property="name" column="name" javaType="java.lang.String"></result>
+        <result property="password" column="password" javaType="java.lang.String"></result>
+        <result property="visitCode" column="visit_code" javaType="java.lang.String"></result> <result property="skuName" column="sku_name" javaType="java.lang.String"></result>
+        <result property="useRecom" column="use_recom" javaType="java.lang.Long"></result>
+        <result property="levelCode" column="level_code" javaType="java.lang.String"></result>
+        <result property="mid" column="mid" javaType="java.lang.Long"></result>
+        <result property="updateTime" column="update_time" javaType="java.sql.Timestamp"></result>
+    </resultMap>
+
+    <select id="querayByName" resultMap="memberResultMap">
+        SELECT * FROM wxb_memeber WHERE account =#{account};
+    </select>
+</mapper>

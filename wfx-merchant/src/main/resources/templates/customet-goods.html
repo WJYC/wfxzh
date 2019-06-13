@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]-->
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="js/jquery-3.1.1.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>-->
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-treeview.js"></script>
+    <link href="css/bootstrap-treeview.css">
+    <link href="css/default.css">
+    <link href="css/normalize.css">
+
+
+    <script type="text/javascript" src="http://cdn-hangzhou.goeasy.io/goeasy.js"></script>
+    <script type="text/javascript">
+        var orderNum=0;
+
+        var goEasy = new GoEasy({
+            appkey: 'BC-bb260d5008904e028946290c1dafa24f'
+        });
+        //GoEasy-OTP可以对appkey进行有效保护，详情请参考：GoEasy-Reference
+
+        goEasy.subscribe({
+            channel:'merchant',
+            onMessage: function(message){
+                alert("有新的订单");
+                orderNum=orderNum+1;
+            }
+        });
+    </script>
+    <![endif]-->
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <span class="glyphicon glyphicon-user"></span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="btn-group" >
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">系统首页 <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">首页</a></li>
+                </ul>
+            </div>
+            <div class="btn-group" >
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">商品管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a  onclick="goodsList()">商品信息</a></li>
+                    <li><a  onclick="addGood()">增加商品</a></li>
+                    <li><a href="#">商品文案</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">增加微信文案</a></li>
+                    <li><a href="#">增加站内文案</a></li>
+                    <li><a href="#">增加空间文案</a></li>
+                </ul>
+            </div>
+            <div class="btn-group" >
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">订单管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">全部的订单</a></li>
+                    <li><a href="#">已下单订单</a></li>
+                    <li><a href="#">待跟进订单</a></li>
+                    <li><a href="#">待发货订单</a></li>
+                    <li><a href="#">已取消订单</a></li>
+                    <!--<li role="separator" class="divider"></li>-->
+                    <li><a href="#">已发货订单</a></li>
+                    <li><a href="#">已结算订单</a></li>
+                    <li><a href="#">已拒收订单</a></li>
+                    <li><a href="#">已签收订单</a></li>
+                    <li><a href="#">已退货订单</a></li>
+                </ul>
+            </div>
+            <div class="btn-group" >
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">统计报表 <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">商品销售统计</a></li>
+                </ul>
+            </div>
+            <div class="btn-group" >
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">财务管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">待结算流水</a></li>
+                    <li><a href="#">已结算流水</a></li>
+                    <li><a href="#">已返款流水</a></li>
+                    <li><a href="#">财务返款单</a></li>
+                    <li><a href="#">消费与充值</a></li>
+                </ul>
+            </div>
+            <div class="btn-group" >
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">用户管理 <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">基本信息</a></li>
+                    <li><a href="#">修改密码</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div id="content" class="col-md-12" >
+
+                <div class="page-content">
+
+                    <div class="alert alert-block alert-info">
+                        <i class="icon-ok green"></i>
+                        欢迎使用
+                        <strong class="green">
+                            微信公众号盈利平台商户后台管理系统(v2.0)
+                        </strong>
+                        ,好用的CPS分销平台!
+                    </div>
+
+                    <div class="alert alert-block alert-success">
+
+                        <h4>
+                            <i class="icon-bar-chart blue"></i>
+                            您今天共产生<label class="red">0</label>条订单
+                            &nbsp;&nbsp;销售总额：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;成本：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;预计分成：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;预计盈利：￥<label class="red">0</label>元
+                        </h4>
+
+                    </div>
+
+                    <div class="alert alert-block alert-info">
+
+                        <h4>
+                            <i class="icon-bar-chart blue"></i>
+                            您近7天共产生<label class="red">0</label>条订单
+                            &nbsp;&nbsp;销售总额：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;成本：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;预计分成：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;预计盈利：￥<label class="red">0</label>元
+                        </h4>
+
+                    </div>
+
+                    <div class="alert alert-block alert-warning">
+
+                        <h4>
+                            <i class="icon-bar-chart blue"></i>
+                            您近30天共产生<label class="red">0</label>条订单
+                            &nbsp;&nbsp;销售总额：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;成本：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;预计分成：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;预计盈利：￥<label class="red">0</label>元
+                        </h4>
+
+                    </div>
+
+                    <div class="alert alert-block alert-danger">
+
+                        <h4>
+                            <i class="icon-bar-chart blue"></i>
+                            您总共产生<label class="red">5</label>条订单
+                            &nbsp;&nbsp;销售总额：￥<label class="red">50.0</label>元
+                            &nbsp;&nbsp;成本：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;预计分成：￥<label class="red">0.0</label>元
+                            &nbsp;&nbsp;预计盈利：￥<label class="red">50.0</label>元
+                        </h4>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>
+<script>
+
+
+    function addGood() {
+        $("#content").load("goods/typeList");
+    }
+    function goodsList() {
+        $("#content").load("goods/goodList");
+    }
+    $(function (){
+        $(".dropdown-toggle").dropdown()
+    })
+</script>

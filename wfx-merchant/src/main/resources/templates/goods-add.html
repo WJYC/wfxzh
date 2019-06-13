@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <base th:href="${#request.getContextPath()} + '/'">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>商品上传</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-heading">新增商品（温馨提示：商品添加/修改成功后，需要管理员审核通过后才能发布到会员推广商品列表）</div>
+    <div class="panel-body">
+        <div class="table-responsive">
+
+
+                <table class="table table-bordered table-striped">
+                    <tbody><tr>
+                        <td align="right">
+                            <span class="red">*</span><strong>商品名称：</strong>
+                        </td>
+                        <td>
+                            <input type="text" id="good_name" name="goodName" value="">
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td align="right"><span class="red">*</span><strong>商品类型：</strong></td>
+                        <td>
+                            <select name="typeId" id="type_id" style="width:252px;font-size:14px" class="selectBox">
+                                <option value="">请选择...</option>
+
+                                <option th:value="${type.typeId}" th:each="type : ${typelist}" th:text="${type.typeName}">保健品</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><span class="red">*</span><strong>排序编号：</strong></td>
+                        <td>
+                            <input type="text" id="order_no" name="orderNo" onkeyup="checkVal2(this);" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><span class="red">*</span><strong>购买作弊值：</strong></td>
+                        <td>
+                            <input type="text" id="sell_num" name="sellNum" onkeyup="checkVal2(this);" value="">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right"><span class="red">*</span><strong>上传图片：</strong></td>
+                        <td>
+
+                            <div class="col-xs-6 col-md-3">
+                                <a href="#" class="thumbnail">
+                                    <img id="image_slt1" src="images/default.png" alt="上传图片预览">
+                                    <input type="hidden" id="image1Input">
+                                </a>
+                            </div>
+                            <form id="form1" enctype="multipart/form-data">
+                            <input type="file" name="file" onchange="upload('image_slt1','form1','image1Input')">
+                            </form>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right"><strong>图片2预览：</strong></td>
+                        <td>
+                            <div id="sm_div1">
+
+                                <div class="col-xs-6 col-md-3">
+                                    <a href="#" class="thumbnail">
+                                        <img id="image_slt2" src="images/default.png" alt="上传图片预览">
+                                        <input type="hidden" id="image2Input">
+                                    </a>
+                                </div>
+                                <form id="form2" enctype="multipart/form-data">
+                                <input type="file" name="file" onchange="upload('image_slt2','form2','image2Input')">
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td align="right"><strong>图片3预览：</strong></td>
+                        <td>
+                            <div id="sm_div2">
+
+                                <div class="col-xs-6 col-md-3">
+                                    <a href="#" class="thumbnail">
+                                        <img id="image_slt3" src="images/default.png" alt="上传图片预览">
+                                        <input type="hidden" id="image3Input">
+                                    </a>
+                                </div>
+                                <form id="form3" enctype="multipart/form-data">
+                                <input type="file" name="file" onchange="upload('image_slt3','form3','image3Input')">
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td align="right"><span class="red">*</span><strong>推广说明：</strong></td>
+                        <td>
+                            <textarea id="promote_desc" name="promoteDesc" style="width:540px; height: 160px;"></textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right"><span class="red">*</span><strong>商品套餐：</strong></td>
+                        <td>
+                            <table id="tcbg" class="table table-bordered table-striped">
+                                <tbody><tr>
+                                    <th align="left" style="background-color:#F9F9F9">(<font color="red">*</font>)描述</th>
+                                    <th align="left" style="background-color:#F9F9F9">(<font color="red">*</font>)成本</th>
+                                    <th align="left" style="background-color:#F9F9F9">(<font color="red">*</font>)价格</th>
+                                    <th align="left" style="background-color:#F9F9F9">(<font color="red">*</font>)分成</th>
+                                    <th align="left" style="background-color:#F9F9F9">(<font color="red">*</font>)客服提成</th>
+                                </tr>
+
+
+
+                                </tbody></table>
+
+
+
+                            <div style="margin-top:10px">
+                                <button class="btn btn-sm btn-primary" onclick="insertType('#tcbg');return false;">
+                                    <i class="icon-save"></i>
+                                    增加
+                                </button>
+                                <!--<button class="btn btn-sm btn-danger" onclick="del_row($VD('tcbg'));return false;">
+                                    <i class="icon-trash"></i>
+                                    删除
+                              </button>-->
+                                (<font color="red">提示信息：</font>上述所有输入项均为必填项目，请务必填入相应值后保存！)
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><span class="red">*</span><strong>商品标签：</strong></td>
+                        <td>
+
+
+
+
+                            <label>
+                                <input type="checkbox" class="ace" id="1" name="tags" value="1">
+                                <span class="lbl">
+								             <span class="label label-danger">热销爆款</span>
+								          </span>
+                            </label>
+                            &nbsp;&nbsp;
+                            <label>
+                                <input type="checkbox" class="ace" id="2" name="tags" value="2">
+                                <span class="lbl">
+								             <span class="label label-default">女粉推荐</span>
+								          </span>
+                            </label>
+                            &nbsp;&nbsp;
+                            <label>
+                                <input type="checkbox" class="ace" id="3" name="tags" value="3">
+                                <span class="lbl">
+								             <span class="label label-primary">男粉推荐</span>
+										  </span>
+                            </label>
+                            &nbsp;&nbsp;
+                            <label>
+                                <input type="checkbox" class="ace" id="4" name="tags" value="4">
+                                <span class="lbl">
+								             <span class="label label-success">人气新品</span>
+								          </span>
+                            </label>
+                            &nbsp;&nbsp;
+                            <label>
+                                <input type="checkbox" class="ace" id="5" name="tags" value="5">
+                                <span class="lbl">
+								             <span class="label label-info">男女通用</span>
+								          </span>
+                            </label>
+
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><span class="red">*</span><strong>微信文案：</strong></td>
+                        <td>
+
+
+                            <input type="checkbox" class="ace" id="copy_1887427" name="gcopy" value="1887427">
+                            <span class="lbl">&nbsp;<a href="http://localhost:8081/cust/goods/add#">11</a></span><br>
+
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right"><strong>站内文案：</strong></td>
+                        <td>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right"><strong>空间文案：</strong></td>
+                        <td>
+
+
+                            <input type="checkbox" class="ace" id="copy_39201701" name="zcopy_id" value="39201701">
+                            <span class="lbl">&nbsp;<a href="http://localhost:8081/cust/goods/add#">12</a></span><br>
+
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right"><strong>跳转说明：</strong></td>
+                        <td>
+                            <textarea id="copy_desc" name="copyDesc" style="width:540px; height:80px;"></textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right"><strong>跳转地址：</strong></td>
+                        <td>
+                            <input type="text" id="forward_link" name="forwardLink" style="width:540px;" value="">
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td colspan="2" align="center">
+							             <span id="submit" onclick="submitData();" class="btn btn-lxg btn-primary">
+							               <i class="icon-save bigger-120"></i>
+							                保存
+							             </span>
+                            <span id="back" onclick="" class="btn btn-lxg btn-undo">
+							             <i class="icon-undo bigger-120"></i>
+							                返回 </span>
+                        </td>
+                    </tr>
+                    </tbody></table>
+        </div>
+
+    </div>
+</div>
+
+
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="js/jquery-3.1.1.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>-->
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+<script>
+
+    function insertType(id) {
+        $(id).append(
+            '<tr name="sku">'+
+                '<td><input type="text" name="skuName"></td>'+
+                '<td><input type="text" name="skuCost"></td>'+
+                '<td><input type="text" name="skuPrice"></td>'+
+                '<td><input type="text"  name="skuPmoney"></td>'+
+                '<td><input type="text" name="serviceMoney"></td>'+
+           '</tr>'
+        )
+    }
+
+    function upload(imgId,formId,hiddenId) {
+        //获取Form表单对象
+        var formTag = $("#"+formId)[0];
+        //获取表单中的数据
+        //formdata封装了表单中的所有数据
+        var formData = new FormData(formTag);
+
+        //上传图片需要重写ajax部分属性
+        $.ajax({
+            url:"addGoods/upload",
+            type:"post",
+            data:formData,
+            contentType:false,
+            processData:false,
+            success:function (data) {
+                if (data.code==1) {
+                    var id = "#"+imgId;
+                    var json = JSON.parse(data.msg);
+//                    alert(data.msg);
+                    $(id).attr("src",json.imageUrl);
+                    $("#"+hiddenId).val(json.imageId);
+                } else {
+                    alert("上传失败");
+                }
+            }
+        });
+
+    }
+
+    function submitData() {
+
+        var goodsName = $("#good_name").val();
+        if (goodsName == null || goodsName == "") {
+            alert("请填写商品名称");
+        }
+        var typeId = $("#type_id").val();
+        var orderNo = $("#order_no").val();
+        var sellNum = $("#sell_num").val();
+        var promoteDesc=$("#promote_desc").val();
+        var input = document.getElementsByTagName("tags");
+        var tags ="";
+        for (var i=0;i<input.length;i++){
+            if(input[i].checked){
+                tags += input[i]+",";
+            }
+        }
+        tags = tags.substr(0,tags.length-1);
+        var goodsJson = {};
+        var skuArray = [];
+        $("tr[name='sku']").each(function () {
+            var sku ={};
+            $(this).find("input").each(function () {
+                sku[this.name]=this.value;
+            });
+            skuArray.push(sku);
+        });
+        goodsJson['goodName'] =goodsName;
+        goodsJson['goodSkuList'] =skuArray;
+        goodsJson['typeId']=typeId;
+        goodsJson['orderNo']=orderNo;
+        goodsJson['sellNum']=sellNum;
+        goodsJson['promoteDesc']=promoteDesc;
+        goodsJson['tags']=tags;
+//
+        var image1URL = $("#image_slt1").attr("src");
+        var image2URL = $("#image_slt2").attr("src");
+        var image3URL = $("#image_slt3").attr("src");
+
+        var images1Id = $("#image1Input").val();
+        var images2Id = $("#image2Input").val();
+        var images3Id = $("#image3Input").val();
+
+        if (image1URL == null || image1URL == "images/default.png") {
+            alert("请上传图片1");
+        }
+        if (image2URL == null || image2URL == "images/default.png") {
+            alert("请上传图片2");
+        }
+        if (image3URL == null || image3URL == "images/default.png") {
+            alert("请上传图片3");
+        }
+        var copyId = $("#copy_1887427").value;
+        goodsJson['goodPic']=image1URL;
+        goodsJson['goodPic1']=image2URL;
+        goodsJson['goodPic2']=image3URL;
+        goodsJson['copyIds']=copyId;
+        goodsJson['goodPicId']=images1Id;
+        goodsJson['goodPic1Id']=images2Id;
+        goodsJson['goodPic2Id']=images3Id;
+        $.ajax({
+            url:"goods/saveGoods",
+            type:"post",
+            data:JSON.stringify(goodsJson),
+            contentType:"application/json;charset=utf-8",
+            success:function (data) {
+                if (data.code==1) {
+                    $("#content").load("goods/goodList");
+                } else {
+                    alert("新增失败")
+                }
+            }
+        });
+//
+    }
+</script>
+</body>
+</html>

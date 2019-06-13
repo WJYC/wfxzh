@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.vip.mapper.OrderMapper">
+
+    <insert id="addOrder">
+        insert into wxb_order(order_id, buyer_phone, good_id, order_time, channel_id, state, buy_num, province, city, area, buyer_reamrk, pay_type, buyer_name, sku_id, address,user_id)
+        values (#{orderId},#{buyerPhone},#{goodId},#{orderTime},#{channelId},#{state},#{buyNum},#{province},#{city},#{area},#{buyerReamrk},#{payType},#{buyerName},#{skuId},#{address},"1");
+    </insert>
+
+    <update id="updateOrderState">
+        update wxb_order set state=1 where order_id=#{orderId}
+    </update>
+</mapper>

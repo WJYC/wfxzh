@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.merchant.mapper.GoodMapper">
+    <resultMap id="typeResultMap" type="com.qianfeng.merchant.po.WxbGoodType">
+        <id property="typeId" column="type_id" javaType="java.lang.String"></id>
+        <result property="typeName" column="type_name" javaType="java.lang.String"></result>
+        <result property="parentId" column="parent_id" javaType="java.lang.String"></result>
+        <result property="typeTag" column="type_tag" javaType="java.lang.String"></result>
+        <result property="orderNo" column="order_no" javaType="java.lang.Long"></result>
+        <result property="alisaCode" column="alisa_code" javaType="java.lang.String"></result>
+    </resultMap>
+
+    <select id="queryTypeList" resultMap="typeResultMap">
+        SELECT * FROM wxb_good_type;
+    </select>
+    <resultMap id="goodsResultMap" type="com.qianfeng.merchant.po.WxbGood">
+        <id column="good_id" property="goodId" javaType="java.lang.String" />
+        <result column="good_name" property="goodName" javaType="java.lang.String" />
+        <result column="customer_id" property="customerId" javaType="java.lang.String" />
+        <result column="good_pic" property="goodPic" javaType="java.lang.String" />
+        <result column="good_pic1" property="goodPic1" javaType="java.lang.String" />
+        <result column="good_pic2" property="goodPic2" javaType="java.lang.String" />
+        <result column="promote_desc" property="promoteDesc" javaType="java.lang.String" />
+        <result column="sku_title" property="skuTitle" javaType="java.lang.String" />
+        <result column="sku_cost" property="skuCost" javaType="java.lang.String" />
+        <result column="sku_price" property="skuPrice" javaType="java.lang.String" />
+        <result column="sku_pmoney" property="skuPmoney" javaType="java.lang.String" />
+        <result column="copy_ids" property="copyIds" javaType="java.lang.String" />
+        <result column="copy_desc" property="copyDesc" javaType="java.lang.String" />
+        <result column="forward_link" property="forwardLink" javaType="java.lang.String" />
+        <result column="order_no" property="orderNo" javaType="java.lang.Long" />
+        <result column="type_id" property="typeId" javaType="java.lang.String" />
+        <result column="tags" property="tags" javaType="java.lang.String" />
+        <result column="state" property="state" javaType="java.lang.Long" />
+        <result column="create_time" property="createTime" javaType="java.sql.Timestamp" />
+        <result column="toped" property="toped" javaType="java.lang.Long" />
+        <result column="recomed" property="recomed" javaType="java.lang.Long" />
+        <result column="toped_time" property="topedTime" javaType="java.sql.Timestamp" />
+        <result column="recomed_time" property="recomedTime" javaType="java.sql.Timestamp" />
+        <result column="spc_id" property="spcId" javaType="java.lang.String" />
+        <result column="zon_id" property="zonId" javaType="java.lang.String" />
+        <result column="sell_num" property="sellNum" javaType="java.lang.Long" />
+        <result column="website" property="website" javaType="java.lang.String" />
+        <result column="iswxpay" property="iswxpay" javaType="java.lang.Long" />
+        <result column="isfdfk" property="isfdfk" javaType="java.lang.Long" />
+        <result column="leixingId" property="leixingId" javaType="java.lang.Long" />
+        <result column="kfqq" property="kfqq" javaType="java.lang.String" />
+
+    </resultMap>
+    <select id="queryGoodsList" resultMap="goodsResultMap">
+        SELECT * FROM wxb_good;
+    </select>
+
+    <delete id="delGoodById">
+        DELETE  FROM wxb_good WHERE good_id=#{goodId};
+    </delete>
+
+    <insert id="saveGoods">
+        insert into wxb_good(good_id, good_name, customer_id, good_pic, good_pic1, good_pic2,order_no,sell_num,promote_desc,tags,copy_ids)
+        values (#{goodId},#{goodName},#{customerId},#{goodPic},#{goodPic1},#{goodPic2},#{orderNo},#{sellNum},#{promoteDesc},#{tags},#{copyIds})
+    </insert>
+    <insert id="saveGoodsSku">
+        insert into wxb_good_sku(sku_id, sku_name, sku_cost, sku_price, sku_pmoney, good_id, order_no,service_money)
+        values <foreach collection="skuList" item="sku" separator=",">
+        (#{sku.skuId},#{sku.skuName},#{sku.skuCost},#{sku.skuPrice},#{sku.skuPmoney},#{sku.goodId},#{sku.orderNo},#{sku.serviceMoney})
+    </foreach>
+    </insert>
+</mapper>

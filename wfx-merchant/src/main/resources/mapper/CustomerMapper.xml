@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.merchant.mapper.CustomerMapper">
+    <resultMap id="customerResultMap" type="com.qianfeng.merchant.po.WxbCustomer">
+        <id property="customerId" column="customer_id" javaType="java.lang.String"></id>
+        <result property="customerName" column="customer_name" javaType="java.lang.String"></result>
+        <result property="qq" column="qq" javaType="java.lang.String"></result>
+        <result property="wxh" column="wxh" javaType="java.lang.String"></result>
+        <result property="phone" column="phone" javaType="java.lang.String"></result>
+        <result property="createtime" column="create_time" javaType="java.sql.Timestamp"></result>
+        <result property="loginName" column="login_name" javaType="java.lang.String"></result>
+        <result property="loginPwd" column="login_pwd" javaType="java.lang.String"></result>
+        <result property="state" column="state" javaType="java.lang.Long"></result>
+        <result property="level" column="level" javaType="java.lang.Long"></result>
+        <result property="accBalance" column="acc_balance" javaType="java.lang.Double"></result>
+        <result property="updateTime" column="update_time" javaType="java.sql.Timestamp"></result>
+        <result property="website" column="website" javaType="java.lang.String"></result>
+    </resultMap>
+
+    <select id="findByLoginName" resultMap="customerResultMap">
+        SELECT * FROM wxb_customer WHERE login_name =#{loginName};
+    </select>
+
+</mapper>

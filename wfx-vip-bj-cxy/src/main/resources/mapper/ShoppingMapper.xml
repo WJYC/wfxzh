@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.vip.mapper.ShoppingMapper">
+    <resultMap id="shoppingResultMap" type="com.qianfeng.vip.po.TbShoppingCar">
+        <id property="shpCartId" column="shp_cart_id"></id>
+        <result property="shpGoodsId" column="shp_goods_id"></result>
+        <result property="shpUserId" column="shp_user_id"></result>
+        <result property="shpMerchantId" column="shp_merchant_id"></result>
+        <result property="shpGoodsSku" column="shp_goods_sku"></result>
+        <result property="shpGoodsNum" column="shp_goods_num"></result>
+    </resultMap>
+
+    <select id="addshopping" >
+        insert into tb_shopping_car(shp_goods_id, shp_user_id, shp_merchant_id, shp_goods_sku, shp_goods_num)
+        values (#{shpGoodsId},#{shpUserId},#{shpMerchantId},#{shpGoodsSku},#{shpGoodsNum})
+    </select>
+    <resultMap id="shpListResultMap" type="com.qianfeng.vip.vo.MerchantInfo">
+        <result property="merchantName" column="customer_name"/>
+        <collection property="goodsInfoList" ofType="com.qianfeng.vip.vo.GoodsInfo">
+            <result property="goodsName" column="good_name"/>
+            <result property="goodsPic" column="good_pic"/>
+            <result property="skuName" column="sku_name"/>
+            <result property="skuPrice" column="sku_price"/>
+            <result property="num" column="shp_goods_num"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryShoppingList" resultMap="shpListResultMap">
+        SELECT g.good_name,g.good_pic,gs.sku_price,gs.sku_name,sc.shp_goods_num,c.customer_name from tb_shopping_car sc join wxb_memeber m
+        join wxb_good g
+        join wxb_customer c
+        join wxb_good_sku gs
+        on sc.shp_goods_id=g.good_id
+        and sc.shp_merchant_id=c.customer_id
+        and sc.shp_user_id=m.memeber_id
+        and sc.shp_goods_sku=gs.sku_id
+        and sc.shp_user_id='47376995';
+    </select>
+
+</mapper>
